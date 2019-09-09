@@ -20,5 +20,7 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
+
 /.idea/
 /stack.yaml.lock
+/out/
