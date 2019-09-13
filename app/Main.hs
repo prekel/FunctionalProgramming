@@ -4,26 +4,30 @@ import Lib
 
 main :: IO ()
 --main = someFunc
-main = print "123"
+main = do
+    line <- getLine
+    let a = read line :: Double
+    line <- getLine
+    let b = read line :: Double
+    line <- getLine
+    let c = read line :: Double
+    print (quadratic a b c)
 
-sum' :: (Num a) => [a] -> a
-sum' [] = 0
-sum' (x:xs) = x + sum' xs
-
-a' :: (Num a) => [a] -> a
-a' [] = 0
-a' (x:xs) = x + sum' xs
-
-linear a b 
-    | a == 0 = []
+linear a b
+    | a == 0 && b == 0 = error "Infinite number of roots"
+    | a == 0 && b /= 0 = []
+    | b == 0 = [0]
     | otherwise = [-b / a]
 
+discriminant a b c = b ^ 2 - 4 * a * c
+
 quadratic a b c
-    | a == 0 = []
-    | det == 0 = [-b / (2 * a)]
-    | det > 0  = [(-b - sqrt det) / (2 * a), (-b + sqrt det) / (2 * a)]
-    | otherwise = []
-    where det = b ^ 2 - 4 * a * c
+    | a == 0 = linear b c
+--    | a == 0 = error "Non quadratic equation"
+    | d < 0 = []
+    | d == 0 = [-b / (2 * a)]
+    | otherwise = [(-b - sqrt d) / (2 * a), (-b + sqrt d) / (2 * a)]
+    where d = discriminant a b c 
 
 checker a b c x = a * x * x + b * x + c
 
@@ -31,4 +35,11 @@ checker' x f
     | f x == 0 = True
     | otherwise = False
 
---quadratic' a b c = [(-b - det) / (2 * a), (-b + det) / (2 * a), let det = b ^ 2 - 4 * a * c]
+maximum' :: (Ord a) => [a] -> a  
+maximum' [] = error "maximum of empty list"  
+maximum' [x] = x  
+maximum' (x:xs)   
+    | x > maxTail = x  
+    | otherwise = maxTail  
+    where maxTail = maximum' xs
+    
