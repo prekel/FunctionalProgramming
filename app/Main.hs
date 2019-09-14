@@ -3,7 +3,6 @@ module Main where
 import Lib
 
 main :: IO ()
---main = someFunc
 main = do
     line <- getLine
     let a = read line :: Double
@@ -17,57 +16,18 @@ linear :: (Num i, Eq i, Fractional i) => i -> i -> [i]
 linear a b
     | a == 0 && b == 0 = error "Infinite number of roots"
     | a == 0 && b /= 0 = []
-    | b == 0 = [0]
-    | otherwise = [-b / a]
+    | b == 0           = [0]
+    | otherwise        = [-b / a]
 
 discriminant a b c = b ^ 2 - 4 * a * c
 
 quadratic a b c
-    | a == 0 = linear b c
+    | a == 0    = linear b c
 --    | a == 0 = error "Non quadratic equation"
-    | d < 0 = []
-    | d == 0 = [-b / (2 * a)]
+    | d < 0     = []
+    | d == 0    = [-b / (2 * a)]
     | otherwise = [(-b - sqrt d) / (2 * a), (-b + sqrt d) / (2 * a)]
-    where d = discriminant a b c 
-
-checker a b c x = a * x * x + b * x + c == 0
-
-checker' x f 
-    | f x == 0 = True
-    | otherwise = False
-
-maximum' :: (Ord a) => [a] -> a  
-maximum' [] = error "maximum of empty list"  
-maximum' [x] = x  
-maximum' (x:xs)   
-    | x > maxTail = x  
-    | otherwise = maxTail  
-    where maxTail = maximum' xs
-
-replicate' :: (Num i, Ord i) => i -> a -> [a]
-replicate' n x
-    | n <= 0    = []
-    | otherwise = x:replicate' (n-1) x
-
-polynomialCalc :: (Num i) => [i] -> i -> i
-polynomialCalc [] x = 0
-polynomialCalc [g] x = g
-polynomialCalc (g:gs) x = g * x ^ length gs + polynomialCalc gs x
-
-polynomialDerivative :: (Num i) => [i] -> [i]
-polynomialDerivative [] = []
-polynomialDerivative [x] = []
-polynomialDerivative (x:xs) = (x * fromIntegral(length xs)) : polynomialDerivative xs
-
-polynomialSolve :: (Eq i, Fractional i, Ord i) => [i] -> i -> [i]
-polynomialSolve [] _ = error "Empty polynomial"
---polynomialSolve [0] = error "Any root"
-polynomialSolve [x] _ = error "No root"
-polynomialSolve (a:b:[]) _ = linear a b
-polynomialSolve p eps = [binarySearch polynomialCalc' (fst x) (snd x) eps | x <- mIntervals]
-    where derRoots = polynomialSolve (polynomialDerivative p) eps
-          mIntervals = monotonyIntervals (derRoots)
-          polynomialCalc' x = polynomialCalc p x
+    where d = discriminant a b c
 
 positiveInf :: Fractional a => a
 positiveInf = 1 / 0
@@ -79,26 +39,43 @@ approxPositiveInf = 2^32
 approxNegativeInf :: Fractional a => a
 approxNegativeInf = -2^32
 
-binarySearch
-  :: (Ord t, Ord a, Fractional t, Num a) =>
-     (t -> a) -> t -> t -> t -> t
+polynomialCalc :: (Num i) => [i] -> i -> i
+polynomialCalc [] x     = 0
+polynomialCalc [g] x    = g
+polynomialCalc (g:gs) x = g * x ^ length gs + polynomialCalc gs x
+
+polynomialDerivative :: (Num i) => [i] -> [i]
+polynomialDerivative []     = []
+polynomialDerivative [x]    = []
+polynomialDerivative (x:xs) = (x * fromIntegral(length xs)) : polynomialDerivative xs
+
+polynomialSolve :: (Eq i, Fractional i, Ord i) => [i] -> i -> [i]
+polynomialSolve [] _       = error "Empty polynomial"
+polynomialSolve [0] _      = error "Any root"
+polynomialSolve [x] _      = error "No root"
+polynomialSolve (a:b:[]) _ = linear a b
+polynomialSolve p eps      = [binarySearch polynomialCalc' (fst x) (snd x) eps | x <- mIntervals]
+    where derRoots = polynomialSolve (polynomialDerivative p) eps
+          mIntervals = monotonyIntervals (derRoots)
+          polynomialCalc' x = polynomialCalc p x
+
+binarySearch :: (Ord t, Ord a, Fractional t, Num a) => (t -> a) -> t -> t -> t -> t
 binarySearch f left right eps
     | left == negativeInf      = binarySearch f approxNegativeInf right eps
     | right == positiveInf     = binarySearch f left approxPositiveInf eps
     | abs (left - right) < eps = median
-    | mValue > 0 = binarySearch f left median eps
+    | mValue > 0               = binarySearch f left median eps
     | otherwise                = binarySearch f median right eps
     where median = (left + right) / 2
           mValue = isPositive * f median
           isPositive = if (f right - f left) > 0 then 1 else (-1)
 
-
 monotonyIntervals :: (Fractional a) => [a] -> [(a, a)]
-monotonyIntervals [] = [(negativeInf, positiveInf)]
-monotonyIntervals [x] = [(negativeInf, x), (x, positiveInf)]
+monotonyIntervals []     = [(negativeInf, positiveInf)]
+monotonyIntervals [x]    = [(negativeInf, x), (x, positiveInf)]
 monotonyIntervals (x:xs) = [(negativeInf, x)] ++ [(x, snd (head mixs))] ++ tail mixs
     where mixs = monotonyIntervals xs
 
-monotonyIntervals' :: (Fractional a) => [a] -> [(a, a)]
-monotonyIntervals' x = take (length mix - 2) (tail (mix))
-    where mix = monotonyIntervals x
+--monotonyIntervals' :: (Fractional a) => [a] -> [(a, a)]
+--monotonyIntervals' x = take (length mix - 2) (tail (mix))
+--    where mix = monotonyIntervals x
