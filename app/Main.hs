@@ -4,13 +4,15 @@ import Lib
 
 main :: IO ()
 main = do
+    putStrLn "Введите точность eps: "
     line <- getLine
-    let a = read line :: Double
+    let eps = read line :: Double
+    
+    putStrLn ("Введите через запятую коэффициенты уравнения от коэффициента при большей степени до меньшей: ")
     line <- getLine
-    let b = read line :: Double
-    line <- getLine
-    let c = read line :: Double
-    print (quadratic a b c)
+    let poly = read ("[" ++ line ++ "]") :: [Double]
+    
+    print (polynomialSolve poly eps)
 
 linear :: (Num i, Eq i, Fractional i) => i -> i -> [i]
 linear a b
@@ -75,7 +77,3 @@ monotonyIntervals []     = [(negativeInf, positiveInf)]
 monotonyIntervals [x]    = [(negativeInf, x), (x, positiveInf)]
 monotonyIntervals (x:xs) = [(negativeInf, x)] ++ [(x, snd (head mixs))] ++ tail mixs
     where mixs = monotonyIntervals xs
-
---monotonyIntervals' :: (Fractional a) => [a] -> [(a, a)]
---monotonyIntervals' x = take (length mix - 2) (tail (mix))
---    where mix = monotonyIntervals x
