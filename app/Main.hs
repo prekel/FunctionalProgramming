@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+--import Lib
 
 main :: IO ()
 main = do
@@ -59,27 +59,13 @@ polynomialSolve [0] _       = error "Any root"
 polynomialSolve [x] _       = error "No root"
 polynomialSolve [a, b] _    = linear a b
 polynomialSolve [a, b, c] _ = quadratic a b c
-polynomialSolve p eps       = if not cnd1 then [binarySearch f negativeInf firstRight eps] else [] ++
-                              [binarySearch f (fst x) (snd x) eps |
-                                  x <- mIntervals',
-                                  sign (f (fst x)) * sign (f (snd x)) > 0 && abs (f (fst x) * f (snd x)) >= eps
-                              ] ++
-                              if not cnd2 then [binarySearch f lastLeft positiveInf eps] else []
+polynomialSolve p eps       = [u | u <- [binarySearch f (fst x) (snd x) eps | x <- mIntervals], abs (f u) <= eps * 100] 
     where derRoots          = polynomialSolve (polynomialDerivative p) eps
           mIntervals        = monotonyIntervals (derRoots)
           f x = polynomialCalc p x
           sign x = if x > 0 then 1 else -1
-          mIntervals' = take (length mIntervals - 2) (tail mIntervals)
-          firstRight = snd (head mIntervals)
-          lastLeft = fst (last mIntervals)
-          a1 = f (firstRight - 1)
-          b1 = firstRight
-          cnd1 = (a1 > b1 && b1 > eps) || (a1 < b1 && b1 < -eps)
-          a2 = f lastLeft
-          b2 = f (lastLeft + 1)
-          cnd2 = (a2 > b2 && a2 < -eps) || (a2 < b2 && a2 > eps)
 
-binarySearch :: (Ord t, Ord a, Fractional t, Fractional a, Show a, Show t) => (t -> a) -> t -> t -> t -> t
+binarySearch :: (Ord t, Fractional t, Show t) => (t -> t) -> t -> t -> t -> t
 binarySearch f left right eps
     | left == negativeInf && right == positiveInf = binarySearch f approxNegativeInf approxPositiveInf eps
     | left == negativeInf && sign == 1       = binarySearch f (increaser f (-1) right 1) right eps
