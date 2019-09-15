@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: db2e175e4e1b4df0951813fe8cf3cbee4c3b8c8fc2e9a506037b1e920200d6ef
+-- hash: d22bfb45c0ca3e195e22fb83d4b958997e4f6d83d1ad4fc786a3f5ef70494b42
 
 name:           FunctionalProgramming
 version:        0.1.0.0
@@ -58,5 +58,7 @@ test-suite FunctionalProgramming-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       FunctionalProgramming
+    , QuickCheck
     , base >=4.7 && <5
+    , hspec
   default-language: Haskell2010
