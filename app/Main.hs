@@ -16,22 +16,26 @@ main = do
 
 linear :: (Num i, Eq i, Fractional i) => i -> i -> [i]
 linear a b
-    | a == 0 && b == 0 = error "Infinite number of roots"
+    | a == 0 && b == 0 = error "Any root"
     | a == 0 && b /= 0 = []
     | b == 0           = [0]
     | otherwise        = [-b / a]
 
-discriminant :: (Fractional i) => i -> i -> i -> i
-discriminant a b c = b ^ 2 - 4 * a * c
+--discriminant :: (Fractional i) => i -> i -> i -> i
+--discriminant a b c = b ^ 2 - 4 * a * c
 
 quadratic :: (Ord i, Fractional i, Floating i) => i -> i -> i -> [i]
 quadratic a b c
     | a == 0    = linear b c
 --    | a == 0 = error "Non quadratic equation"
     | d < 0     = []
-    | d == 0    = [-b / (2 * a)]
-    | otherwise = [(-b - sqrt d) / (2 * a), (-b + sqrt d) / (2 * a)]
-    where d = discriminant a b c
+    | d == 0    = [x0]
+    | otherwise = [min x1 x2, max x1 x2]
+    where discriminant a b c = b ^ 2 - 4 * a * c
+          d = discriminant a b c
+          x0 = -b / (2 * a)
+          x1 = (-b - sqrt d) / (2 * a)
+          x2 = (-b + sqrt d) / (2 * a)
 
 positiveInf :: Fractional a => a
 positiveInf = 1 / 0
@@ -39,9 +43,9 @@ negativeInf :: Fractional a => a
 negativeInf = -1 / 0
 
 approxPositiveInf :: Fractional a => a
-approxPositiveInf = 2^32
+approxPositiveInf = 2^62
 approxNegativeInf :: Fractional a => a
-approxNegativeInf = -2^32
+approxNegativeInf = -2^64
 
 polynomialCalc :: (Num i) => [i] -> i -> i
 polynomialCalc [] x     = 0
@@ -59,7 +63,7 @@ polynomialSolve [0] _       = error "Any root"
 polynomialSolve [x] _       = error "No root"
 polynomialSolve [a, b] _    = linear a b
 polynomialSolve [a, b, c] _ = quadratic a b c
-polynomialSolve p eps       = [u | u <- [binarySearch f (fst x) (snd x) eps | x <- mIntervals], abs (f u) <= eps * 100] 
+polynomialSolve p eps       = [u | u <- [binarySearch f (fst x) (snd x) eps | x <- mIntervals], abs (f u) <= eps * 100]
     where derRoots          = polynomialSolve (polynomialDerivative p) eps
           mIntervals        = monotonyIntervals (derRoots)
           f x = polynomialCalc p x
