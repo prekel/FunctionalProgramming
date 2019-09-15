@@ -1,6 +1,6 @@
 module Lib
     (
-      polynomialSolve
+    polynomialSolve
     ) where
 
 linear :: (Num i, Eq i, Fractional i) => i -> i -> [i]
@@ -67,9 +67,9 @@ binarySearch f left right eps
     | otherwise                              = binarySearch f median right eps
     where median = (left + right) / 2
           mValue = sign * f median
-          fleft  = if left == negativeInf then f (right - 1) else f left
-          fright = if right == positiveInf then f (left + 1) else f right
-          sign   = if (fright - fleft) > 0 then 1 else (-1)
+          fLeft  = if left == negativeInf then f (right - 1) else f left
+          fRight = if right == positiveInf then f (left + 1) else f right
+          sign   = if (fRight - fLeft) > 0 then 1 else (-1)
 
 increaser :: (Fractional p, Ord p, Fractional t, Ord t, Show t, Show p) => (p -> t) -> p -> p -> t -> p
 increaser f k r sign
