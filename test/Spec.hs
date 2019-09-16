@@ -18,7 +18,7 @@ main = hspec $ do
     it "returns the first element of an *arbitrary* list" $
       property $ \x xs -> head (x:xs) == (x :: Int)
 
-    it "throws an exception if used with an empty list" $ do
+    it "throws an exc   eption if used with an empty list" $ do
       evaluate (head []) `shouldThrow` anyException
       
     it ("1231e12" ++ show p1 ++ " " ++ show a1) $ do
