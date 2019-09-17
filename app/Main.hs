@@ -4,10 +4,14 @@ import Lib
 
 main :: IO ()
 main = do
-    putStrLn "Enter eps (Example: 1e-8): "
+    putStrLn "Enter a, b, c for equation ax^2+bx+c=0 (a = 0 if linear equation): "
+    putStrLn "a: "
     line <- getLine
-    let eps = read line :: Double
-    putStrLn "Enter coefficients of equation from coefficient at greater degree (Example: 1,-2,-1,2 for x^3-2x^2-x+2=0): "
+    let a = read line :: Double
+    putStrLn "b: "
     line <- getLine
-    let poly = read ("[" ++ line ++ "]") :: [Double]
-    print ("Roots list: " ++ show (polynomialSolve poly eps))
+    let b = read line :: Double
+    putStrLn "c: "
+    line <- getLine
+    let c = read line :: Double
+    print (quadratic a b c)
