@@ -4,10 +4,7 @@ import Lib
 
 main :: IO ()
 main = do
-    putStrLn "Enter eps (Example: 1e-8): "
+    putStrLn "Enter 123"
     line <- getLine
-    let eps = read line :: Double
-    putStrLn "Enter coefficients of equation from coefficient at greater degree (Example: 1,-2,-1,2 for x^3-2x^2-x+2=0): "
-    line <- getLine
-    let poly = read ("[" ++ line ++ "]") :: [Double]
-    print ("Roots list: " ++ show (polynomialSolve poly eps))
+    let q = read line :: Double
+    print q
