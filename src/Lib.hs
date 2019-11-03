@@ -1,20 +1,54 @@
 module Lib
     (
-    subfactorialRec,
-    subfactorialList,
+    Archipelago,
+    createArchipelago,
+    ArchipelagoCollection,
+    addArchipelagoCollection,
+    deleteArchipelagoCollection,
+    modifyNameArchipelagoCollection,
+    hasUninhabited,
+    whereCountIslandsIs
     ) where
 
-subfactorialRec n = subfactorialRec' n n
-    where subfactorialRec' n k 
-            | k < 0 = 0
-            | otherwise = minusOne k * factorialAdivFactorialB n k + subfactorialRec' n (k - 1)
-          factorialAdivFactorialB n k
-            | n == k = 1
-            | otherwise = n * factorialAdivFactorialB (n - 1) k
-          minusOne k = if even k then 1 else -1
+import Data.List
+import Data.Maybe
 
-subfactorialList n = sum [minusOne k * factorialAdivFactorialB n k | k <- [0 .. n]]
-    where factorialAdivFactorialB n k
-            | n == k = 1
-            | otherwise = product [(k + 1) .. n]
-          minusOne k = if even k then 1 else -1
+data Archipelago = Archipelago {
+    name :: String,
+    countIslands :: Int,
+    countInhabitedIslands :: Int
+} deriving (Show, Eq)
+
+type ArchipelagoCollection = [Archipelago]
+
+createArchipelago name countIslands countInhabitedIslands
+    | name == "" = error "Emplty name"
+    | countIslands < 2 = error "Islands count must be more than 1"
+    | countInhabitedIslands < 0 = error "Inhabited Islands count must be monot less than 0"
+    | otherwise = Archipelago {
+                     name = name,
+                     countIslands = countIslands,
+                     countInhabitedIslands = countInhabitedIslands }
+
+anyArchipelagoCollection :: (Archipelago -> Bool) -> ArchipelagoCollection -> Bool
+anyArchipelagoCollection = any
+
+whereArchipelagoCollection :: (Archipelago -> Bool) -> ArchipelagoCollection -> ArchipelagoCollection
+whereArchipelagoCollection = filter
+
+addArchipelagoCollection :: Archipelago -> ArchipelagoCollection -> ArchipelagoCollection
+addArchipelagoCollection archipelago collection = collection ++ [archipelago]
+
+deleteArchipelagoCollection :: Archipelago -> ArchipelagoCollection -> ArchipelagoCollection
+deleteArchipelagoCollection archipelago collection = leftListPart ++ tail rightListPart
+    where (leftListPart, rightListPart) = splitAt (fromMaybe 0 (elemIndex archipelago collection)) collection
+
+modifyNameArchipelagoCollection :: String -> Archipelago -> ArchipelagoCollection -> ArchipelagoCollection
+modifyNameArchipelagoCollection oldName newArchipelago collection = leftListPart ++ [newArchipelago] ++ tail rightListPart
+    where archipelago = head (whereArchipelagoCollection (\x -> name x == oldName) collection)
+          (leftListPart, rightListPart) = splitAt (fromMaybe 0 (elemIndex archipelago collection)) collection
+
+
+hasUninhabited collection = anyArchipelagoCollection (\x -> countInhabitedIslands x > 0)
+
+whereCountIslandsIs n = whereArchipelagoCollection (\x -> countIslands x == n)
