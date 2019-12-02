@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Lab_05
 
 main :: IO ()
 main = do

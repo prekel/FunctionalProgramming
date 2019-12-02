@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 435fbd4ee12324a7537ae223ae6c79b8434eb62ec14b9dcd98a24dc29cd8f0f4
+-- hash: f355d5d5c65a7f2f99186575f2075bc854f1b7faa7b6fb23a8269cf5d41b131d
 
 name:           FunctionalProgramming
 version:        0.1.0.0
@@ -27,8 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      FP_5
-      Lib
+      Lab_05
   other-modules:
       Paths_FunctionalProgramming
   hs-source-dirs:

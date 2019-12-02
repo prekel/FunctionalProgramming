@@ -1,7 +1,7 @@
 import Test.Hspec
 import Test.QuickCheck
 
-import Lib
+import Lab_05
 
 a1 = createArchipelago "Archipelago1" 2 1
 
