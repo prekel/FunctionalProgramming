@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 28fd42e003df622092bdda151ad7b0dea19a6e86440aae93ef75c2f8c3dbc8a3
+-- hash: 3987c2437ab3f8161e831e2f04cbcfcf374422a032acc35336452430ea431ecd
 
 name:           FunctionalProgramming
 version:        0.1.0.0
@@ -30,6 +30,7 @@ library
       Archipelago
       ArchipelagoCollection
       Lab_05
+      Lab_06
   other-modules:
       Paths_FunctionalProgramming
   hs-source-dirs:

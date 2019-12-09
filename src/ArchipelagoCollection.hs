@@ -1,7 +1,7 @@
 module ArchipelagoCollection
     (
     addArchipelagoToCollection,
-    deleteArchipelagoFromCollection,
+    deleteArchipelagoByNameFromCollection,
     modifyArchipelagoByNameFromCollection,
     hasUninhabitedArchipelagoCollection,
     whereCountIslandsIsArchipelagoCollection
@@ -21,13 +21,20 @@ deleteArchipelagoFromCollection archipelago collection
     | otherwise = collection
     where (leftListPart, rightListPart) = splitAt (fromMaybe 0 (elemIndex archipelago collection)) collection
 
+deleteArchipelagoByNameFromCollection :: String -> [Archipelago] -> [Archipelago]
+deleteArchipelagoByNameFromCollection name collection
+    | archipelago `elem` collection = leftListPart ++ tail rightListPart
+    | otherwise = collection
+    where archipelago = head (filter (\x -> getNameArchipelago x == name) collection)
+          (leftListPart, rightListPart) = splitAt (fromMaybe 0 (elemIndex archipelago collection)) collection
+
 -- | Создаёт новую коллекцию с заменённым архипелагом по названию
 modifyArchipelagoByNameFromCollection oldName newArchipelago collection = leftListPart ++ [newArchipelago] ++ tail rightListPart
     where archipelago = head (filter (\x -> getNameArchipelago x == oldName) collection)
           (leftListPart, rightListPart) = splitAt (fromMaybe 0 (elemIndex archipelago collection)) collection
 
 -- | Выясняет, имеются ли архипелаги, состоящие только из необитаемых островов
-hasUninhabitedArchipelagoCollection a = any (\x -> getCountInhabitedIslandsArchipelago x > 0)
+hasUninhabitedArchipelagoCollection a = any (\x -> getCountInhabitedIslandsArchipelago x > 0) a
 
 -- | Получает коллекцию архипелагов с указанием кол-ва островов в них
-whereCountIslandsIsArchipelagoCollection n = filter (\x -> getCountIslandsArchipelago x == n)
+whereCountIslandsIsArchipelagoCollection n a = filter (\x -> getCountIslandsArchipelago x == n) a
