@@ -1,6 +1,6 @@
 module Lab_06
     (
-
+        menu
     ) where
 
 import Archipelago
@@ -8,50 +8,50 @@ import ArchipelagoCollection
 
 
 menu :: [Archipelago] -> IO ()
-menu faculties = do
+menu archipelago = do
     putStr . unlines $ map concatNums choices
     choice <- getLine
 
     case validate choice of
-        Just 1 -> do addArchipelagoToCollectionViaInput faculties
+        Just 1 -> do addArchipelagoToCollectionViaInput archipelago
 
-        Just 2 -> do putStr "Input number of faculty in the list to modify: "
+        Just 2 -> do putStr "Введите название архипелага: "
                      name <- getLine
-                     modifyArchipelagoInCollectionViaInputByName name faculties
+                     modifyArchipelagoInCollectionViaInputByName name archipelago
 
-        Just 3 -> do putStr "Input number of faculty in the list to delete: "
+        Just 3 -> do putStr "Введите название архипелага: "
                      name <- getLine
                      do
-                        let faculties' = deleteArchipelagoByNameFromCollection name faculties
-                        menu faculties'
+                        let archipelago' = deleteArchipelagoByNameFromCollection name archipelago
+                        menu archipelago'
 
-        Just 4 -> do putStrLn (if hasUninhabitedArchipelagoCollection faculties then "+" else "-")
-                     menu faculties
+        Just 4 -> do putStrLn (if hasUninhabitedArchipelagoCollection archipelago then "Имеется" else "Не имеется")
+                     menu archipelago
 
-        Just 5 -> do putStr "Input N: "
+        Just 5 -> do putStr "Введите кол-во островов: "
                      number <- getLine
                      let intNumber = read number :: Int
-                     if (intNumber < 0) || (intNumber > length faculties)
-                            then putStrLn "Incorrect input"
-                            else putStr (archipelagoToString (whereCountIslandsIsArchipelagoCollection intNumber faculties))
-                     menu faculties
+                     if (intNumber < 0) || (intNumber > length archipelago)
+                            then putStrLn "Некорректный ввод"
+                            else putStr (archipelagoToString (whereCountIslandsIsArchipelagoCollection intNumber archipelago))
+                     menu archipelago
 
-        Just 6 -> putStr (archipelagoToString faculties) >> menu faculties
+        Just 6 -> putStr (archipelagoToString archipelago) >> menu archipelago
 
-        Just 7 -> do putStr "Input path to the file: "
+        Just 7 -> do putStr "Введите название файла: "
                      filePath <- getLine
-                     writeFile filePath (archipelagoToString faculties) >> menu faculties
+                     writeFile filePath (archipelagoToString archipelago) >> menu archipelago
 
-        Just 8 -> do putStr "Input path to the file: "
+        Just 8 -> do putStr "Введите название файла: "
                      filePath <- getLine
                      contents <- readFile filePath
                      let allLines = lines contents
-                     let faculties' = stringsToArchipelagos allLines
-                     menu faculties'
+                     let archipelagos' = stringsToArchipelagos allLines
+                     menu archipelagos'
 
-        Just 9 -> putStrLn "Exit the menu"
+        Just 9 -> putStrLn "Выход"
 
-        Nothing -> putStrLn "Incorrect input"
+        Nothing -> putStrLn "Некорректный ввод"
     where concatNums (i, s) = show i ++ ") " ++ s
 
 validate :: String -> Maybe Int
@@ -64,58 +64,58 @@ validate s = isValid (reads s)
 
 choices :: [(Int, String)]
 choices = zip [1.. ] [
-    ("Create and add a faculty to the list"),
-    ("Modify a faculty in the list"),
-    ("Delete a faculty in the list"),
-    ("Sort faculties by the fewest amount of students"),
-    ("Sort faculties by the best relative academic performance"),
-    ("Display all faculties in the list"),
-    ("Write faculties into the file"),
-    ("Read faculties from the file"),
-    ("Exit")
+    "Создать и добавить архипелаг",
+    "Модифицировать архипелаг",
+    "Удалить архипелаг",
+    "Имеются ли архипелаги, состоящие только из необитаемых островов",
+    "Вывести архипелаги с указанием кол-ва островов в них",
+    "Вывесли все архипелаги",
+    "Записать в файл",
+    "Считать из файла",
+    "Выйти"
  ]
 
 addArchipelagoToCollectionViaInput :: [Archipelago] -> IO ()
-addArchipelagoToCollectionViaInput faculties = do
-    putStr "Input new name of the faculty: "
-    facultyName <- getLine
-    putStr "Enter new amount of students:"
-    studentsAmount <- getLine
-    let intStudentAmount = read studentsAmount :: Int
-    putStr "Enter new amount of successful students: "
-    successfulStudentsAmount <- getLine
-    let intSuccessfulStudentsAmount = read successfulStudentsAmount :: Int
-    if checkInput facultyName intStudentAmount intSuccessfulStudentsAmount
-    then do let faculty = createArchipelago facultyName intStudentAmount intSuccessfulStudentsAmount
-            let faculties' = addArchipelagoToCollection faculty faculties
-            menu faculties'
+addArchipelagoToCollectionViaInput archipelagos = do
+    putStr "Введите название архипелага: "
+    name <- getLine
+    putStr "Введите кол-во островов: "
+    countIslandsStr <- getLine
+    let countIslands = read countIslandsStr :: Int
+    putStr "Введите кол-во обитаемых островов: "
+    countInhabitedIslandsStr <- getLine
+    let countInhabitedIslands = read countInhabitedIslandsStr :: Int
+    if checkInput name countIslands countInhabitedIslands
+    then do let archipelago = createArchipelago name countIslands countInhabitedIslands
+            let archipelagos' = addArchipelagoToCollection archipelago archipelagos
+            menu archipelagos'
     else do
-        putStrLn "Incorrect input"
-        menu faculties
+        putStrLn "Некорректный ввод"
+        menu archipelagos
 
 modifyArchipelagoInCollectionViaInputByName :: String -> [Archipelago] -> IO ()
-modifyArchipelagoInCollectionViaInputByName name faculties = do
-    putStr "Input new name of the faculty: "
-    facultyName <- getLine
-    putStr "Enter new amount of students:"
-    studentsAmount <- getLine
-    let intStudentAmount = read studentsAmount :: Int
-    putStr "Enter new amount of successful students: "
-    successfulStudentsAmount <- getLine
-    let intSuccessfulStudentsAmount = read successfulStudentsAmount :: Int
-    if checkInput facultyName intStudentAmount intSuccessfulStudentsAmount
-    then do let archipelago = createArchipelago facultyName intStudentAmount intSuccessfulStudentsAmount
-            let faculties' = modifyArchipelagoByNameFromCollection name archipelago faculties
-            menu faculties'
+modifyArchipelagoInCollectionViaInputByName name archipelagos = do
+    putStr "Введите новое название архипелага: "
+    name <- getLine
+    putStr "Введите новое кол-во островов: "
+    countIslandsStr <- getLine
+    let countIslands = read countIslandsStr :: Int
+    putStr "Введите новое кол-во обитаемых островов: "
+    countInhabitedIslandsStr <- getLine
+    let countInhabitedIslands = read countInhabitedIslandsStr :: Int
+    if checkInput name countIslands countInhabitedIslands
+    then do let archipelago = createArchipelago name countIslands countInhabitedIslands
+            let archipelagos' = modifyArchipelagoByNameFromCollection name archipelago archipelagos
+            menu archipelagos'
     else do
-        putStrLn "Incorrect input"
-        menu faculties
+        putStrLn "Некорректный ввод"
+        menu archipelagos
 
 checkInput :: String -> Int -> Int -> Bool
-checkInput name studAmount succStudAmount
-    | name == []                           = False
-    | studAmount < 0 || succStudAmount < 0 = False
-    | succStudAmount > studAmount          = False
+checkInput name countIslands countInhabitedIslands
+    | name == ""                           = False
+    | countIslands < 0 || countInhabitedIslands < 0 = False
+    | countInhabitedIslands > countIslands          = False
     | otherwise                            = True
 
 archipelagoToString :: [Archipelago] -> String
