@@ -24,6 +24,9 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+  - directory
+  - deepseq
 
 executables:
   FunctionalProgramming-exe:
@@ -35,6 +38,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - FunctionalProgramming
+    - deepseq
+    - directory
 
 tests:
   FunctionalProgramming-test:
