@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0c0f99473ad748ac897ea6124735058475636e7f2ba3aaa09b3278d92402d0b0
+-- hash: 4eb4b26cd883b3eacf09a9a28f2581b8d437693fa730dc3b92ae8d8c88628050
 
 name:           FunctionalProgramming
 version:        0.1.0.0
@@ -27,8 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Archipelago
-      ArchipelagoCollection
+      Matrix
   other-modules:
       Paths_FunctionalProgramming
   hs-source-dirs:
@@ -37,6 +36,8 @@ library
       base >=4.7 && <5
     , deepseq
     , directory
+    , parallel
+    , matrix
   default-language: Haskell2010
 
 executable FunctionalProgramming-exe
@@ -51,6 +52,8 @@ executable FunctionalProgramming-exe
     , base >=4.7 && <5
     , deepseq
     , directory
+    , parallel
+    , matrix
   default-language: Haskell2010
 
 test-suite FunctionalProgramming-test
@@ -66,4 +69,5 @@ test-suite FunctionalProgramming-test
     , QuickCheck
     , base >=4.7 && <5
     , hspec
+    , matrix
   default-language: Haskell2010

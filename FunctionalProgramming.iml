@@ -43,5 +43,10 @@
     <orderEntry type="library" name="bytestring-0.10.8.2" level="project" />
     <orderEntry type="library" name="Win32-2.6.1.0" level="project" />
     <orderEntry type="library" name="mintty-0.1.2" level="project" />
+    <orderEntry type="library" name="parallel-3.2.2.0" level="project" />
+    <orderEntry type="library" name="matrix-0.3.6.1" level="project" />
+    <orderEntry type="library" name="loop-0.3.0" level="project" />
+    <orderEntry type="library" name="semigroups-0.18.5" level="project" />
+    <orderEntry type="library" name="vector-0.12.0.3" level="project" />
   </component>
 </module>

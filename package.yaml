@@ -27,6 +27,7 @@ library:
   dependencies:
   - directory
   - deepseq
+  - parallel
 
 executables:
   FunctionalProgramming-exe:
@@ -40,6 +41,7 @@ executables:
     - FunctionalProgramming
     - deepseq
     - directory
+    - parallel
 
 tests:
   FunctionalProgramming-test:
