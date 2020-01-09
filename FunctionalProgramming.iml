@@ -48,5 +48,7 @@
     <orderEntry type="library" name="loop-0.3.0" level="project" />
     <orderEntry type="library" name="semigroups-0.18.5" level="project" />
     <orderEntry type="library" name="vector-0.12.0.3" level="project" />
+    <orderEntry type="library" name="text-1.2.3.1" level="project" />
+    <orderEntry type="library" name="binary-0.8.6.0" level="project" />
   </component>
 </module>
