@@ -28,6 +28,7 @@ library:
   - directory
   - deepseq
   - parallel
+  - matrix
 
 executables:
   FunctionalProgramming-exe:
@@ -42,6 +43,7 @@ executables:
     - deepseq
     - directory
     - parallel
+    - matrix
 
 tests:
   FunctionalProgramming-test:
@@ -55,3 +57,4 @@ tests:
     - FunctionalProgramming
     - hspec
     - QuickCheck
+    - matrix
